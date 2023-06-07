@@ -26,7 +26,13 @@ async def search(message: types.Message, state=FSMContext):
     await search_ans.delete()
     async with state.proxy() as data:
         data['search'] = message.text
-    await message.answer("you gay!!!")
+    await Order.categories.set()
+    global categories_ans
+    categories_ans = await message.answer("Now send me categories")
+
+@dp.message_handler(state=Order.categories)
+def categories(message: types.Message, state=FSMContext):
+
 @dp.message_handler(content_types=types.ContentType.STICKER)
 async def process_sticker(message: types.Message):
     await message.answer("you are fucking slave!!!!")
