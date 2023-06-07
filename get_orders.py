@@ -15,10 +15,10 @@ def get_orders(q: list, task: str):
         'Connection': 'keep-alive',
     }
     qs = { 
-        "q_development" : "development_all_inclusive,development_backend,development_frontend,development_prototyping,development_ios,development_android,development_desktop,development_bots,development_games,development_1c_dev,development_scripts,development_voice_interfaces,development_other",
-        "q_testing" : "testing_sites,testing_mobile,testing_software",
-        "q_admin" : "admin_servers,admin_network,admin_databases,admin_security,admin_other",
-        "q_design" : "design_sites,design_landings,design_logos,design_illustrations,design_mobile,design_icons,design_polygraphy,design_banners,design_graphics,design_corporate_identity,design_presentations,design_modeling,design_animation,design_photo,design_other"
+        "development" : "development_all_inclusive,development_backend,development_frontend,development_prototyping,development_ios,development_android,development_desktop,development_bots,development_games,development_1c_dev,development_scripts,development_voice_interfaces,development_other",
+        "testing" : "testing_sites,testing_mobile,testing_software",
+        "admin" : "admin_servers,admin_network,admin_databases,admin_security,admin_other",
+        "design" : "design_sites,design_landings,design_logos,design_illustrations,design_mobile,design_icons,design_polygraphy,design_banners,design_graphics,design_corporate_identity,design_presentations,design_modeling,design_animation,design_photo,design_other"
     }
     # getting right response based on parameters
     response = requests.models.Response()
@@ -37,14 +37,15 @@ def get_orders(q: list, task: str):
     
     # html code getting with soup 
     soup = BeautifulSoup(response.text, "html.parser")
-    divs = soup.find_all('div', {"class": "task__title"})
+    firs_divs = soup.find_all('div', {"class": "task__column_desc"})
     headers = []
-    for div in divs:
-        header = div.find_all('a')
-        for i in header:
-            headers.append(i.get_text())
-    print(headers)
+    print(firs_divs)
+    for div in firs_divs:
+        header_div = div 
+        header_tags = div.find_all('a', {"class": ""})
+        
+    
 
     
 
-get_orders(['q_development', "q_admin"], "telegram")
+get_orders(['development', "admin"], "telegram")

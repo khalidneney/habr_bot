@@ -28,11 +28,17 @@ async def search(message: types.Message, state=FSMContext):
         data['search'] = message.text
     await Order.categories.set()
     global categories_ans
-    categories_ans = await message.answer("Now send me categories")
+    categories_ans = await message.answer("Now send me categories. Message must be like that: development, testing, admin, design")
 
 @dp.message_handler(state=Order.categories)
-def categories(message: types.Message, state=FSMContext):
-
+async def categories(message: types.Message, state=FSMContext):
+    global categories_ans
+    await categories_ans.delete()
+    await bot.delete_message(message.chat.id, message.message_id)
+    async with state.proxy() as data:
+        data['categories'] = (message.text).split(", ")
+        for i in data['categories']:
+            
 @dp.message_handler(content_types=types.ContentType.STICKER)
 async def process_sticker(message: types.Message):
     await message.answer("you are fucking slave!!!!")
