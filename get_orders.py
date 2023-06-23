@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 import requests
-from numba import prange
 
 
 def get_orders(q: list, task: str):
@@ -38,13 +37,15 @@ def get_orders(q: list, task: str):
     
     # html code getting with soup 
     soup = BeautifulSoup(response.text, "html.parser")
-    title_divs = soup.find_all('div', {"class": "task__title"})
-    title_prices = soup.find_all('span', {"class": "negotiated_price"}) + soup.find_all("span", {"class": "count"})
-    title_prices = [i.text for i in title_prices]
-    title_list = {}
-    for i in prange(len(title_prices)):
-        text = title_divs[i].find('a')
-        title_list[text.text] = title_prices[i]
+    title_divs = soup.find_all('header', {"class": "task__header"})
+    print(title_divs[1].find('div', {"span": "count"}))
+    title_dict = {}
+    for i in title_divs:
+        try:
+            title_dict[i.text] = i.find('span', {"class": "negotiated_price"})
+        except:
+            title_dict[i.text] = i.find('span', {"class": "count"})
+    print(title_dict)
 
 if __name__ == '__main__':
     get_orders(['development'], "telegram")
