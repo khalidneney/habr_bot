@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
-
+#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
 
 def get_orders(q: list, task: str):
     headers = {
@@ -38,15 +38,11 @@ def get_orders(q: list, task: str):
     # html code getting with soup 
     soup = BeautifulSoup(response.text, "html.parser")
     title_divs = soup.find_all('article', {"class": "task task_list"})
-    print(title_divs[1].text)
-    title_dict = {}
-    # for i in title_divs:
-    #     print(i)
-        # title_dict[i.text] = i.find('span', {"class": "negotiated_price"}).text
-        # if  title_dict[i.text] == None:
-        #     title_dict[i.text] = i.find('span', {"class": "count"}).text
+    span_infarmation = [i.text for i in title_divs[2].find_all('span')]
+    print(span_infarmation)
+    # print()
+    # print(test[-2].text)
 
-    print(title_dict)
 
 if __name__ == '__main__':
     get_orders(['development'], "telegram")
