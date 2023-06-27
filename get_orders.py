@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 import requests
-#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
 
 def get_orders(q: list, task: str):
     headers = {
@@ -35,14 +34,18 @@ def get_orders(q: list, task: str):
     else:
         response = requests.get(f"https://freelance.habr.com/task?")
     
-    # html code getting with soup 
+    # html code getting with soup
+    result_list = []
     soup = BeautifulSoup(response.text, "html.parser")
     title_divs = soup.find_all('article', {"class": "task task_list"})
-    span_infarmation = [i.text for i in title_divs[2].find_all('span')]
-    print(span_infarmation)
-    # print()
-    # print(test[-2].text)
-
-
-if __name__ == '__main__':
-    get_orders(['development'], "telegram")
+    for i in title_divs:
+        span_infarmation = [i.find('div', {'class', 'task__title'}).text] + [' '.join(j.text for j in i.find_all('li'))] + [j.text for j in i.find_all('span')]
+        if 'договорная' not in span_infarmation:
+            span_infarmation = span_infarmation[:-1]
+            span_infarmation.pop(3)
+            span_infarmation.remove('')
+        else:
+            span_infarmation.remove('')
+            # span_infarmation.pop(3)
+        result_list.append(span_infarmation)
+    return result_list
